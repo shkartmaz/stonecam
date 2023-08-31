@@ -29,7 +29,7 @@ Software+hardware auxiliary inventory management system for museum work
 ### Misc
 [] Basic scheme
 
-### Box
+### Box (see box.md)
 [] Blueprint
 [] Buy supplies
 [] Woodwork
@@ -59,8 +59,3 @@ Software+hardware auxiliary inventory management system for museum work
 - Slow delivery from Ali - use physical shops in Msk
 - A lot of different stuff to buy - try to order as early as possible. Make a shopping list while in Magadan
 - Slow & painful woodwork - order CNC'd parts in Msk, decrease Bzl trips to 1
-
-## Hardware - required materials
-[] 10 mm plywood 1 to 2 1525 mm sheets? 3k
-[] Hard glossy white surface (floor tile) - free to 300
-[] 
