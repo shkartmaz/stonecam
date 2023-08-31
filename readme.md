@@ -20,9 +20,9 @@ Software+hardware auxiliary inventory management system for museum work
 [] Meadsure size
 
 ### Potential issues
-[] GetStorageInventory loads all inventory in RAM upon every new request [] might become slow. 
-	-[] Load once upon startup?
-	-[] *Split into multiple files? 
+- GetStorageInventory loads all inventory in RAM upon every new request [] might become slow. 
+	- Load once upon startup?
+	- *Split into multiple files? 
 
 ## Hardware progress
 
@@ -53,6 +53,14 @@ Software+hardware auxiliary inventory management system for museum work
 
 ### Brain
 [] Get RPi / Arduino / ...
+[] Get all the components
 
+### Potential issues
+- Slow delivery from Ali - use physical shops in Msk
+- A lot of different stuff to buy - try to order as early as possible. Make a shopping list while in Magadan
+- Slow & painful woodwork - order CNC'd parts in Msk, decrease Bzl trips to 1
 
-### G
+## Hardware - required materials
+[] 10 mm plywood 1 to 2 1525 mm sheets? 3k
+[] Hard glossy white surface (floor tile) - free to 300
+[] 
