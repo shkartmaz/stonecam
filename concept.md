@@ -1,5 +1,6 @@
 # The Lightbox
 *Plywood box with bells and whistles for pics and measurement*
+This is a concept
 
 ## Basic structure
 - A box without a front wall

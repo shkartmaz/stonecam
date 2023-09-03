@@ -5,7 +5,7 @@ Full roadmap for the stonecam project
 [] Write as much code as possible (ideally all of it except hardware interaction)
 [] Make sketches for the lightbox
 [] Compose a shopping list
-[] Make this roadmap with rough dates
+[x] Make this roadmap with rough dates
 
 ## September - Bilibino
 [] Adjust roadmap dates
@@ -31,3 +31,10 @@ Full roadmap for the stonecam project
 [] field-test
 [] present
 [] implement
+
+## Late Autumn - Moscow
+[] reap the fruits
+[] gather feedback
+[] improve
+[] blog
+[] sell

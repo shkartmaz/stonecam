@@ -12,7 +12,7 @@ def GetUserInput():
         storage = input("Введите место хранения или команду: ")
     except Exception as err:
         print("Input failed")
-        print("Text: ", err)
+        print("Text: ", err)у
         print("Name: ", type(err).__name__)    
     else:
         return storage  
