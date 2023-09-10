@@ -3,19 +3,21 @@ import pandas as pd
 COMMAND_LIST = """
 Доступные команды:
 - list - вывести список образцов в текущем активном месте хранения
+- edit - работать с данным местом хранения
 - save - сохранить внесенные изменения
 - help - вывести список доступных команд
 - exit - завершить работу с программой"""
 
-def GetUserInput():
-    try:
-        storage = input("Введите место хранения или команду: ")
-    except Exception as err:
-        print("Input failed")
-        print("Text: ", err)у
-        print("Name: ", type(err).__name__)    
-    else:
-        return storage  
+def GetUserInput(prompt):
+    while True:
+        try:
+            storage = input(prompt)
+        except Exception as err:
+            print("Input failed")
+            print("Text: ", err)
+            print("Name: ", type(err).__name__)    
+        else:
+            return storage  
 
 def GetStorageInventory(filename="in.csv", target_storage="0_0"):
 # returns a list / dataframe of samples in the given storage from the file
@@ -32,20 +34,23 @@ def GetStorageInventory(filename="in.csv", target_storage="0_0"):
             #print(line.split()[0])
             
             
-    df = pd.read_csv(filename, index_col='ID')
+    #df = pd.read_csv(filename, index_col='ID')
+    df = pd.read_csv(filename)
     storage_inventory = df[ df['MCHR'] == target_storage]
     
     
     return storage_inventory
     
 def GetSize():
-    sample_size_X=0 
-    sample_size_Y=0
-    sample_size_Z=0
+    input('Press Enter to measure sample size')
+    sample_size_X=20
+    sample_size_Y=15
+    sample_size_Z=10
     return sample_size_X, sample_size_Y, sample_size_Z
     
 def GetWeight():
-    sample_weight = 0
+    input('Press Enter to measure sample weight')
+    sample_weight = 700
     return sample_weight
     
 def TakePhoto():
@@ -61,6 +66,29 @@ def SavePhoto(sample_code = "0_000000"):
     enhanced_pic = EnhancePhoto(pic)
     pass
     
+def EditStorage(sample_list):
+    updated_samples = []
+    if sample_list.empty:
+        print('No records for this storage')
+    else:
+        for ind, row in sample_list.T.items():
+            print(ind, row['ID'])
+            user_input = GetUserInput('Press enter to measure this sample, type "skip" to skip to the next one:\t')
+            sample_weight = GetWeight()
+            sample_size_X, sample_size_Y, sample_size_Z = GetSize()
+            SavePhoto(row['ID'])
+            df = pd.DataFrame({'ID':row['ID'], 'MCHR':row['MCHR'], 'Weight':sample_weight, 
+                            'Size_X':sample_size_X, 'Size_Y':sample_size_Y, 'Size_Z':sample_size_Z}, index=[ind])
+            updated_samples.append(df)
+            
+    user_input = GetUserInput("Добавить образцы в данное место хранения (y/n)?\t")
+    if user_input.lower == 'y':
+        pass
+    else:
+        pass
+    updated_df = pd.concat(updated_samples)
+    print(updated_df.T)
+
 def AddSampleToRecord(df,
                     sample_code="0_000000", 
                     sample_storage="0_0",
@@ -78,7 +106,7 @@ active_storage_name = ''
 sample_list = []
     
 while True:
-    user_input = GetUserInput()
+    user_input = GetUserInput("Введите место хранения или команду: ")
     
     if user_input == 'exit':
         exit()
@@ -89,6 +117,11 @@ while True:
             print(active_storage_name, 'is empty or does not exist')
         else:
             print(sample_list)
+    elif user_input == 'edit':
+        EditStorage(sample_list)
+        
+    elif user_input == 'save':
+        pass
     elif user_input == 'help':
         print(COMMAND_LIST)
     else:
