@@ -4,7 +4,7 @@ Full roadmap for the stonecam project
 ## September - Topol & Uralsky
 [] Write as much code as possible (ideally all of it except hardware interaction)
 [] Make sketches for the lightbox
-[] Compose a shopping list
+[x] Compose a shopping list
 [x] Make this roadmap with rough dates
 
 ## September - Bilibino

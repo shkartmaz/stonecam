@@ -12,12 +12,13 @@ Software+hardware auxiliary inventory management system for museum work
 ### Functionality
 [x] Read CSV
 [] Write CSV
-[] Edit records
+[x] Edit records
+[] Add records
 [] Take photos
 [] Edit photos
 [] Save photos
 [] Measure weight
-[] Meadsure size
+[] Measure size
 
 ### Potential issues
 - GetStorageInventory loads all inventory in RAM upon every new request [] might become slow. 

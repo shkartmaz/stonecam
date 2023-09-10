@@ -1,23 +1,47 @@
 import pandas as pd
+import re
 
-COMMAND_LIST = """
-Доступные команды:
-- list - вывести список образцов в текущем активном месте хранения
-- edit - работать с данным местом хранения
-- save - сохранить внесенные изменения
-- help - вывести список доступных команд
-- exit - завершить работу с программой"""
+COMMAND_LIST = {
+'list' : 'вывести список образцов в текущем активном месте хранения',
+'edit' : 'работать с текущим активным местом хранения',
+'skip' : 'пропустить измерения текущего образца',
+'cancel' : 'отменить изменения образцов в текущем месте хранения',
+'save' : 'сохранить внесенные изменения',
+'help' : 'вывести список доступных команд',
+'y'     : '\tДа',
+'n'     : '\tНет',
+'exit' : 'завершить работу с программой'
+}
+
+def PrintHelp():
+    print('\nДоступные команды:')
+    for key in COMMAND_LIST.keys():
+        print(f"   {key} \t{COMMAND_LIST[key]}")    
+        
+def IsValid(command):
+    p = re.compile('\d_[\d]{1,7}')
+
+
+    if command in COMMAND_LIST.keys():
+        return True
+    elif p.match(command):
+        return True
+    else:    
+        return False
 
 def GetUserInput(prompt):
     while True:
         try:
-            storage = input(prompt)
+            command = input(prompt)
         except Exception as err:
             print("Input failed")
             print("Text: ", err)
             print("Name: ", type(err).__name__)    
         else:
-            return storage  
+            if IsValid(command):
+                return command
+            else:
+                print("Некорректная команда. Введите 'help', чтобы вывести список доступных команд")
 
 def GetStorageInventory(filename="in.csv", target_storage="0_0"):
 # returns a list / dataframe of samples in the given storage from the file
@@ -42,15 +66,17 @@ def GetStorageInventory(filename="in.csv", target_storage="0_0"):
     return storage_inventory
     
 def GetSize():
-    input('Press Enter to measure sample size')
+    #input('Press Enter to measure sample size')
     sample_size_X=20
     sample_size_Y=15
     sample_size_Z=10
+    print(f"{sample_size_X}x{sample_size_Y}x{sample_size_Z} см")
     return sample_size_X, sample_size_Y, sample_size_Z
     
 def GetWeight():
-    input('Press Enter to measure sample weight')
+    #input('Press Enter to measure sample weight')
     sample_weight = 700
+    print(sample_weight, "г")
     return sample_weight
     
 def TakePhoto():
@@ -69,11 +95,15 @@ def SavePhoto(sample_code = "0_000000"):
 def EditStorage(sample_list):
     updated_samples = []
     if sample_list.empty:
-        print('No records for this storage')
+        print('Место хранения пусто')
     else:
         for ind, row in sample_list.T.items():
-            print(ind, row['ID'])
-            user_input = GetUserInput('Press enter to measure this sample, type "skip" to skip to the next one:\t')
+            print("\nОбразец:\t", row['ID'])
+            user_input = GetUserInput("Нажмите Enter для измерения образца, введите 'skip' или 'cancel' для пропуска или отмены\t")
+            if user_input == 'skip':
+                continue
+            elif user_input == 'cancel':
+                break
             sample_weight = GetWeight()
             sample_size_X, sample_size_Y, sample_size_Z = GetSize()
             SavePhoto(row['ID'])
@@ -86,8 +116,11 @@ def EditStorage(sample_list):
         pass
     else:
         pass
-    updated_df = pd.concat(updated_samples)
-    print(updated_df.T)
+    if updated_samples:
+        updated_df = pd.concat(updated_samples)
+        print(updated_df.T)
+    else:
+        print('Изменений не внесено')
 
 def AddSampleToRecord(df,
                     sample_code="0_000000", 
@@ -106,7 +139,8 @@ active_storage_name = ''
 sample_list = []
     
 while True:
-    user_input = GetUserInput("Введите место хранения или команду: ")
+    print("Активное место хранения:", active_storage_name)
+    user_input = GetUserInput("\nВведите место хранения или команду: ")
     
     if user_input == 'exit':
         exit()
@@ -114,7 +148,7 @@ while True:
         # for sample in sample_list:
             # print(sample)
         if sample_list.empty:
-            print(active_storage_name, 'is empty or does not exist')
+            print(active_storage_name, 'пусто или не существует')
         else:
             print(sample_list)
     elif user_input == 'edit':
@@ -123,7 +157,7 @@ while True:
     elif user_input == 'save':
         pass
     elif user_input == 'help':
-        print(COMMAND_LIST)
+        PrintHelp()
     else:
         try:
             sample_list = GetStorageInventory(target_storage=user_input)
