@@ -15,7 +15,7 @@ Software+hardware auxiliary inventory management system for museum work
 [x] Edit records
 [] Add records
 [] Take photos
-[] Edit photos
+[] Edit photos -PIL.ImageEnhance - wtf?
 [] Save photos
 [] Measure weight
 [] Measure size

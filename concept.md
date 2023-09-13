@@ -5,6 +5,7 @@ This is a concept
 ## Basic structure
 - A box without a front wall
 - Two compartaments: big lower working space; small upper tech attic
+- dimensions 70x70x70 working area, h20 attic, h10 basement, 50-70 legs
 
 ## Lights
 Bright neutral while LED strips mounted on the roof

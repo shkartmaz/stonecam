@@ -1,6 +1,8 @@
 import pandas as pd
 import re
 
+EXIT_CODE_OK, EXIT_CODE_SKIP, EXIT_CODE_CANCEL = 11, 22, 33
+
 COMMAND_LIST = {
 'list' : 'вывести список образцов в текущем активном месте хранения',
 'edit' : 'работать с текущим активным местом хранения',
@@ -10,6 +12,7 @@ COMMAND_LIST = {
 'help' : 'вывести список доступных команд',
 'y'     : '\tДа',
 'n'     : '\tНет',
+''      : '\tНажимайте Enter для подтверждения',
 'exit' : 'завершить работу с программой'
 }
 
@@ -92,31 +95,57 @@ def SavePhoto(sample_code = "0_000000"):
     enhanced_pic = EnhancePhoto(pic)
     pass
     
+def NotEmpty(list):
+    isEmpty = True
+    if len(list) == 0:
+        return True
+    for 
+
+def EditSample(sample_ID, sample_MCHR, sample_index):
+    print("\nОбразец:\t", sample_ID)
+    user_input = GetUserInput("Нажмите Enter для измерения образца, введите 'skip' или 'cancel' для пропуска или отмены\t")
+    if user_input == 'skip':
+        return None, EXIT_CODE_SKIP
+    elif user_input == 'cancel':
+        return None, EXIT_CODE_CANCEL
+    sample_weight = GetWeight()
+    sample_size_X, sample_size_Y, sample_size_Z = GetSize()
+    SavePhoto(sample_ID)
+    
+    df = pd.DataFrame({'ID':sample_ID, 'MCHR':sample_MCHR, 'Weight':sample_weight, 
+                            'Size_X':sample_size_X, 'Size_Y':sample_size_Y, 'Size_Z':sample_size_Z}, index=[sample_index])
+    return df, EXIT_CODE_OK
+    
 def EditStorage(sample_list):
     updated_samples = []
     if sample_list.empty:
         print('Место хранения пусто')
     else:
         for ind, row in sample_list.T.items():
-            print("\nОбразец:\t", row['ID'])
-            user_input = GetUserInput("Нажмите Enter для измерения образца, введите 'skip' или 'cancel' для пропуска или отмены\t")
-            if user_input == 'skip':
-                continue
-            elif user_input == 'cancel':
-                break
-            sample_weight = GetWeight()
-            sample_size_X, sample_size_Y, sample_size_Z = GetSize()
-            SavePhoto(row['ID'])
-            df = pd.DataFrame({'ID':row['ID'], 'MCHR':row['MCHR'], 'Weight':sample_weight, 
-                            'Size_X':sample_size_X, 'Size_Y':sample_size_Y, 'Size_Z':sample_size_Z}, index=[ind])
+            df, exit_code = EditSample(row['ID'], row['MCHR'], ind)
             updated_samples.append(df)
+            if exit_code == EXIT_CODE_CANCEL:
+                break
+    
+            # print("\nОбразец:\t", row['ID'])
+            # user_input = GetUserInput("Нажмите Enter для измерения образца, введите 'skip' или 'cancel' для пропуска или отмены\t")
+            # if user_input == 'skip':
+                # continue
+            # elif user_input == 'cancel':
+                # break
+            # sample_weight = GetWeight()
+            # sample_size_X, sample_size_Y, sample_size_Z = GetSize()
+            # SavePhoto(row['ID'])
+            # df = pd.DataFrame({'ID':row['ID'], 'MCHR':row['MCHR'], 'Weight':sample_weight, 
+                            # 'Size_X':sample_size_X, 'Size_Y':sample_size_Y, 'Size_Z':sample_size_Z}, index=[ind])
+            # updated_samples.append(df)
             
     user_input = GetUserInput("Добавить образцы в данное место хранения (y/n)?\t")
     if user_input.lower == 'y':
         pass
     else:
         pass
-    if updated_samples:
+    if NotEmpty(updated_samples):
         updated_df = pd.concat(updated_samples)
         print(updated_df.T)
     else:
