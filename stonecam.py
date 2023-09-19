@@ -1,5 +1,7 @@
 import pandas as pd
 import re
+import os
+from datetime import date
 
 EXIT_CODE_OK, EXIT_CODE_SKIP, EXIT_CODE_CANCEL = 11, 22, 33
 
@@ -23,8 +25,6 @@ def PrintHelp():
         
 def IsValid(command):
     p = re.compile('\d_[\d]{1,7}')
-
-
     if command in COMMAND_LIST.keys():
         return True
     elif p.match(command):
@@ -95,11 +95,13 @@ def SavePhoto(sample_code = "0_000000"):
     enhanced_pic = EnhancePhoto(pic)
     pass
     
-def NotEmpty(list):
-    isEmpty = True
+def IsEmpty(list):
     if len(list) == 0:
         return True
-    for 
+    for element in list:
+        if element is not None:
+            return False
+    return True
 
 def EditSample(sample_ID, sample_MCHR, sample_index):
     print("\nОбразец:\t", sample_ID)
@@ -116,7 +118,7 @@ def EditSample(sample_ID, sample_MCHR, sample_index):
                             'Size_X':sample_size_X, 'Size_Y':sample_size_Y, 'Size_Z':sample_size_Z}, index=[sample_index])
     return df, EXIT_CODE_OK
     
-def EditStorage(sample_list):
+def EditStorage(sample_list, active_storage):
     updated_samples = []
     if sample_list.empty:
         print('Место хранения пусто')
@@ -127,29 +129,23 @@ def EditStorage(sample_list):
             if exit_code == EXIT_CODE_CANCEL:
                 break
     
-            # print("\nОбразец:\t", row['ID'])
-            # user_input = GetUserInput("Нажмите Enter для измерения образца, введите 'skip' или 'cancel' для пропуска или отмены\t")
-            # if user_input == 'skip':
-                # continue
-            # elif user_input == 'cancel':
-                # break
-            # sample_weight = GetWeight()
-            # sample_size_X, sample_size_Y, sample_size_Z = GetSize()
-            # SavePhoto(row['ID'])
-            # df = pd.DataFrame({'ID':row['ID'], 'MCHR':row['MCHR'], 'Weight':sample_weight, 
-                            # 'Size_X':sample_size_X, 'Size_Y':sample_size_Y, 'Size_Z':sample_size_Z}, index=[ind])
-            # updated_samples.append(df)
-            
-    user_input = GetUserInput("Добавить образцы в данное место хранения (y/n)?\t")
-    if user_input.lower == 'y':
-        pass
+    while True:
+        user_input = GetUserInput("Добавить образцы в данное место хранения (y/n)?\t")
+        if 'y' in user_input:
+            sample_ID = GetUserInput('Введите номер образца:\t')
+            sample_index = int(sample_ID.replace('_',''))
+            df, exit_code = EditSample(sample_ID, active_storage, sample_index)
+            updated_samples.append(df)
+            if exit_code == EXIT_CODE_CANCEL:
+                break
+        else:
+            break
+    if IsEmpty(updated_samples):
+        print('Изменений не внесено')
     else:
-        pass
-    if NotEmpty(updated_samples):
         updated_df = pd.concat(updated_samples)
         print(updated_df.T)
-    else:
-        print('Изменений не внесено')
+        WriteRecordToCSV(updated_df)
 
 def AddSampleToRecord(df,
                     sample_code="0_000000", 
@@ -160,15 +156,20 @@ def AddSampleToRecord(df,
                     sample_size_Z=0):
     pass
     
-def WriteRecordToCSV(output_file, df):
-    pass
+def WriteRecordToCSV(df):
+    filename = 'measurements/' + str(date.today()) + '.csv'
+    if os.path.exists(filename):
+        df.to_csv(filename, header=False, index=False, mode='a')
+    else:
+        os.makedirs('measurements', exist_ok=True)
+        df.to_csv(filename, header=True, index=False, mode='w')
     
 user_input = ''
-active_storage_name = ''
+active_storage = ''
 sample_list = []
     
 while True:
-    print("Активное место хранения:", active_storage_name)
+    print("Активное место хранения:", active_storage)
     user_input = GetUserInput("\nВведите место хранения или команду: ")
     
     if user_input == 'exit':
@@ -177,11 +178,11 @@ while True:
         # for sample in sample_list:
             # print(sample)
         if sample_list.empty:
-            print(active_storage_name, 'пусто или не существует')
+            print(active_storage, 'пусто или не существует')
         else:
             print(sample_list)
     elif user_input == 'edit':
-        EditStorage(sample_list)
+        EditStorage(sample_list, active_storage)
         
     elif user_input == 'save':
         pass
@@ -195,6 +196,6 @@ while True:
             print("Text: ", err)
             print("Name: ", type(err).__name__)
         else:
-            active_storage_name = user_input
+            active_storage = user_input
             print(f"Найдено записей: {len(sample_list)}")
         
