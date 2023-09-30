@@ -6,7 +6,7 @@ Full roadmap for the stonecam project
 [] Make sketches for the lightbox, get dimensions
 [x] Compose a shopping list
 [x] Make this roadmap with rough dates
-[] Tinker with image manipulation
+[] Tinker with image manipulation - opencv
 
 ## September - Bilibino
 [] Adjust roadmap dates

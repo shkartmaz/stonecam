@@ -6,16 +6,16 @@ Software+hardware auxiliary inventory management system for museum work
 [x] Main menu
 [x] Hardware functions (placeholders)
 [x] Input
-[] Output
-[] Editing
+[x] Output
+[x] Editing
 
 ### Functionality
 [x] Read CSV
-[] Write CSV
+[x] Write CSV
 [x] Edit records
-[] Add records
+[x] Add records
 [] Take photos
-[] Edit photos -PIL.ImageEnhance - wtf?
+[] Edit photos - OpenCV
 [] Save photos
 [] Measure weight
 [] Measure size
@@ -30,7 +30,7 @@ Software+hardware auxiliary inventory management system for museum work
 ### Misc
 [] Basic scheme
 
-### Box (see box.md)
+### Box 
 [] Blueprint
 [] Buy supplies
 [] Woodwork
@@ -47,13 +47,13 @@ Software+hardware auxiliary inventory management system for museum work
 [] Setup
 
 ### Scale
-[] Find USB / I2C / analog scale
+[] Find USB scale
 [] Buy
 [] Install
 [] Setup
 
 ### Brain
-[] Get RPi / Arduino / ...
+[] Get RPi / Arduino / PC
 [] Get all the components
 
 ### Potential issues
